@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "99eb6461-52f5-43a6-bf1a-1882a2abb007",
-    "name": "location_intelligence",
+    "_postman_id": "bfab30d9-7b10-4f5d-9106-f3737ff6d23d",
+    "name": "lis",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "26958714"
+    "_exporter_id": "26958714",
+    "_collection_link": "https://go.postman.co/collection/26958714-bfab30d9-7b10-4f5d-9106-f3737ff6d23d?source=collection_link"
   },
   "item": [
     {
@@ -129,15 +130,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8000/api/v1/auth/refresh",
-          "protocol": "http",
+          "raw": "{{base_url}}/auth/refresh",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
-            "v1",
             "auth",
             "refresh"
           ]
@@ -157,15 +154,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8000/api/v1/auth/me",
-          "protocol": "http",
+          "raw": "{{base_url}}/auth/me",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
-            "v1",
             "auth",
             "me"
           ]
@@ -185,12 +178,12 @@
           },
           {
             "key": "Authorization",
-            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzcxNTQzODM0LCJpYXQiOjE3NzE1NDIwMzQsInR5cGUiOiJhY2Nlc3MifQ.T6OPecUECHrFMDhbEEIQ2MbQOhS2JLGZ_QeidbftAXQ"
+            "value": "Bearer {{jwt_token}}"
           }
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\"address\":\"cerca del centro comercial, lomas\", \"region\": \"co\"} ",
+          "raw": "{\"address\":\" calle 50 # 12-20, piso 2\", \"region\": \"co\"} ",
           "options": {
             "raw": {
               "language": "json"
@@ -198,15 +191,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8000/api/v1/geocode",
-          "protocol": "http",
+          "raw": "{{base_url}}/geocode",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "8000",
           "path": [
-            "api",
-            "v1",
             "geocode"
           ]
         },
@@ -246,8 +235,7 @@
     },
     {
       "key": "jwt_token",
-      "value": "",
-      "type": "default"
+      "value": ""
     }
   ]
 }
