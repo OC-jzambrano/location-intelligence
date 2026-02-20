@@ -59,8 +59,8 @@ Get the API running in under 10 minutes.
 ### 1. Clone and Configure
 
 ```bash
-git clone https://github.com/Open-Starter-Kits/fastapi-api-starter.git
-cd fastapi-api-starter
+git clone https://github.com/OC-jzambrano/location-intelligence.git
+cd location-intelligence
 
 # Copy environment template
 cp .env.example .env
