@@ -1,0 +1,253 @@
+{
+  "info": {
+    "_postman_id": "99eb6461-52f5-43a6-bf1a-1882a2abb007",
+    "name": "location_intelligence",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26958714"
+  },
+  "item": [
+    {
+      "name": "user_register",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"test@example.com\", \r\n\"password\": \"securepass123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/auth/register \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\": \"test@example.com\", \"password\": \"securepass123\"}'"
+      },
+      "response": []
+    },
+    {
+      "name": "user_login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login successful\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "if (jsonData.access_token) {\r",
+              "    pm.collectionVariables.set(\"jwt_token\", jsonData.access_token);\r",
+              "    console.log(\"Access token saved.\");\r",
+              "} else {\r",
+              "    console.log(\"No access_token found in response.\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"test@example.com\",\r\n  \"password\": \"securepass123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/auth/login \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\": \"test@example.com\", \"password\": \"securepass123\"}'"
+      },
+      "response": []
+    },
+    {
+      "name": "refresh_token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzcyMTQ2ODIyLCJpYXQiOjE3NzE1NDIwMjIsInR5cGUiOiJyZWZyZXNoIn0.lMUJUsezB0_0YPOw3Cntzvs_oHa8o7w9kpHiu0-mcV8\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/auth/refresh",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "refresh"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/auth/login \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\": \"test@example.com\", \"password\": \"securepass123\"}'"
+      },
+      "response": []
+    },
+    {
+      "name": "test_token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzcxNTQzODM0LCJpYXQiOjE3NzE1NDIwMzQsInR5cGUiOiJhY2Nlc3MifQ.T6OPecUECHrFMDhbEEIQ2MbQOhS2JLGZ_QeidbftAXQ"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/api/v1/auth/me",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "me"
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/auth/me \\\r\n  -H \"Authorization: Bearer TU_ACCESS_TOKEN_AQUI\"\r\n"
+      },
+      "response": []
+    },
+    {
+      "name": "location_intelligence_core",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzcxNTQzODM0LCJpYXQiOjE3NzE1NDIwMzQsInR5cGUiOiJhY2Nlc3MifQ.T6OPecUECHrFMDhbEEIQ2MbQOhS2JLGZ_QeidbftAXQ"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"address\":\"cerca del centro comercial, lomas\", \"region\": \"co\"} ",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/geocode",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "geocode"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/geocode \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: Bearer TU_ACCESS_TOKEN\" \\\r\n  -d '{\"address\":\"1600 Amphitheatre Parkway, Mountain View, CA\",\"language\":\"en\",\"region\":\"us\"}'\r\n"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 """
-FastAPI REST API Starter - Main Application Entry Point.
+Location Intelligence API - Main Application Entry Point.
 
 This module initializes and configures the FastAPI application with:
-- CORS middleware
 - Rate limiting middleware
 - API versioning
 - OpenAPI documentation
@@ -105,15 +104,14 @@ def create_application() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
         description="""
-## FastAPI REST API Starter
+## Location Intelligence API
 
-A production-ready FastAPI starter kit with:
+A production-ready FastAPI application for geocoding and location services:
 
 - **JWT Authentication** - Secure access and refresh tokens
 - **API Versioning** - Clean versioned API structure
 - **Rate Limiting** - Protection against abuse
 - **Caching** - Redis-backed with in-memory fallback
-- **PostgreSQL** - Async database with SQLAlchemy 2.0
 
 ### Authentication
 
