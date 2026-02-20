@@ -10,10 +10,10 @@ T = TypeVar("T")
 class SuccessResponse(BaseModel, Generic[T]):
     """
     Standard success response wrapper.
-    
+
     Provides consistent response structure across all endpoints.
     """
-    
+
     success: bool = Field(default=True, description="Indicates successful operation")
     message: str | None = Field(default=None, description="Optional success message")
     data: T | None = Field(default=None, description="Response data payload")
@@ -22,10 +22,10 @@ class SuccessResponse(BaseModel, Generic[T]):
 class ErrorResponse(BaseModel):
     """
     Standard error response.
-    
+
     Provides consistent error structure across all endpoints.
     """
-    
+
     success: bool = Field(default=False, description="Always false for errors")
     error: str = Field(..., description="Error type or code")
     message: str = Field(..., description="Human-readable error message")
@@ -41,22 +41,22 @@ def success_response(
 ) -> dict[str, Any]:
     """
     Create a standardized success response.
-    
+
     Args:
         data: Response data payload.
         message: Optional success message.
-    
+
     Returns:
         Dictionary with success response structure.
     """
     response: dict[str, Any] = {"success": True}
-    
+
     if message:
         response["message"] = message
-    
+
     if data is not None:
         response["data"] = data
-    
+
     return response
 
 
@@ -67,12 +67,12 @@ def error_response(
 ) -> dict[str, Any]:
     """
     Create a standardized error response.
-    
+
     Args:
         error: Error type or code.
         message: Human-readable error message.
         details: Additional error details.
-    
+
     Returns:
         Dictionary with error response structure.
     """
@@ -81,8 +81,8 @@ def error_response(
         "error": error,
         "message": message,
     }
-    
+
     if details:
         response["details"] = details
-    
+
     return response

@@ -22,7 +22,7 @@ router = APIRouter()
 async def health_check() -> dict[str, Any]:
     """
     Basic health check.
-    
+
     Returns application status and version info.
     """
     return {
@@ -42,12 +42,12 @@ async def health_check() -> dict[str, Any]:
 async def readiness_check(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
     """
     Readiness check with dependency verification.
-    
+
     Checks database connectivity and cache availability.
     """
     checks: dict[str, Any] = {}
     all_healthy = True
-    
+
     # Check database
     try:
         await db.execute(text("SELECT 1"))
@@ -55,7 +55,7 @@ async def readiness_check(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
     except Exception as e:
         checks["database"] = {"status": "unhealthy", "error": str(e)}
         all_healthy = False
-    
+
     # Check cache
     try:
         cache = get_cache()
@@ -69,7 +69,7 @@ async def readiness_check(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
     except Exception as e:
         checks["cache"] = {"status": "unhealthy", "error": str(e)}
         all_healthy = False
-    
+
     return {
         "status": "ready" if all_healthy else "degraded",
         "checks": checks,
@@ -85,7 +85,7 @@ async def readiness_check(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
 async def liveness_check() -> dict[str, str]:
     """
     Liveness check.
-    
+
     Simple check to verify the application is running.
     Used by Kubernetes/container orchestrators.
     """

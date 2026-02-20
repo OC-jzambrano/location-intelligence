@@ -48,15 +48,15 @@ async def db_engine():
         poolclass=StaticPool,
         echo=False,
     )
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield engine
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-    
+
     await engine.dispose()
 
 
@@ -69,7 +69,7 @@ async def db_session(db_engine) -> AsyncGenerator[AsyncSession, None]:
         expire_on_commit=False,
         autoflush=False,
     )
-    
+
     async with async_session_maker() as session:
         yield session
 
@@ -77,18 +77,18 @@ async def db_session(db_engine) -> AsyncGenerator[AsyncSession, None]:
 @pytest_asyncio.fixture(scope="function")
 async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     """Create test client with database override."""
-    
+
     async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
         yield db_session
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test",
     ) as ac:
         yield ac
-    
+
     app.dependency_overrides.clear()
 
 
@@ -102,11 +102,11 @@ async def test_user(db_session: AsyncSession) -> User:
         is_active=True,
         is_verified=True,
     )
-    
+
     db_session.add(user)
     await db_session.commit()
     await db_session.refresh(user)
-    
+
     return user
 
 
@@ -121,11 +121,11 @@ async def test_superuser(db_session: AsyncSession) -> User:
         is_verified=True,
         is_superuser=True,
     )
-    
+
     db_session.add(user)
     await db_session.commit()
     await db_session.refresh(user)
-    
+
     return user
 
 

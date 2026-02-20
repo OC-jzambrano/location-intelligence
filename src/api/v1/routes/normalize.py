@@ -4,6 +4,7 @@ from src.services.lis import LISService
 
 router = APIRouter(tags=["LIS"])
 
+
 @router.post("", response_model=NormalizeResponse)
 async def normalize(payload: NormalizeRequest) -> NormalizeResponse:
     svc = LISService()

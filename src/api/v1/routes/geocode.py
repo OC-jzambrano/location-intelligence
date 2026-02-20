@@ -6,6 +6,7 @@ from src.services.lis import LISService
 
 router = APIRouter(tags=["LIS"])
 
+
 @router.post("", response_model=LISLocationResponse)
 async def geocode(
     payload: GeocodeRequest,

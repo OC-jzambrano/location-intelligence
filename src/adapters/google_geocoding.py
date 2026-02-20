@@ -1,18 +1,24 @@
 import httpx
 from dataclasses import dataclass
 
+
 @dataclass
 class GeocodeResult:
     lat: float
     lng: float
     place_id: str | None
 
+
 class GoogleGeocodingAdapter:
-    def __init__(self, api_key: str, base_url: str = "https://maps.googleapis.com/maps/api/geocode/json"):
+    def __init__(
+        self, api_key: str, base_url: str = "https://maps.googleapis.com/maps/api/geocode/json"
+    ):
         self.api_key = api_key
         self.base_url = base_url
 
-    async def geocode(self, address: str, language: str | None = None, region: str | None = None) -> GeocodeResult:
+    async def geocode(
+        self, address: str, language: str | None = None, region: str | None = None
+    ) -> GeocodeResult:
         params = {"address": address, "key": self.api_key}
         if language:
             params["language"] = language

@@ -36,13 +36,13 @@ async def register(
 ) -> User:
     """
     Register a new user.
-    
+
     - **email**: Valid email address (must be unique)
     - **password**: Password (minimum 8 characters)
     - **full_name**: Optional full name
     """
     user_service = UserService(db)
-    
+
     try:
         user = await user_service.create(user_data)
     except ValueError as e:
@@ -50,7 +50,7 @@ async def register(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e),
         )
-    
+
     return user
 
 
@@ -72,22 +72,22 @@ async def login(
 ) -> TokenResponse:
     """
     Login to obtain access and refresh tokens.
-    
+
     - **email**: Registered email address
     - **password**: Account password
-    
+
     Returns JWT access token (short-lived) and refresh token (long-lived).
     """
     auth_service = AuthService(db)
     tokens = await auth_service.login(credentials.email, credentials.password)
-    
+
     if not tokens:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return tokens
 
 
@@ -107,20 +107,20 @@ async def refresh_tokens(
 ) -> TokenResponse:
     """
     Refresh access and refresh tokens.
-    
+
     Use this endpoint when the access token expires.
     Requires a valid refresh token.
     """
     auth_service = AuthService(db)
     tokens = await auth_service.refresh_tokens(token_request.refresh_token)
-    
+
     if not tokens:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired refresh token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return tokens
 
 
@@ -139,7 +139,7 @@ async def get_me(
 ) -> User:
     """
     Get current authenticated user's profile.
-    
+
     Requires valid access token in Authorization header.
     """
     return current_user
@@ -160,7 +160,7 @@ async def logout(
 ) -> None:
     """
     Logout current user.
-    
+
     Note: With JWT, true server-side logout requires token blacklisting.
     This endpoint serves as a signal for clients to discard tokens.
     For production, implement token blacklisting in Redis.

@@ -30,7 +30,7 @@ async def get_current_user_profile(
 ) -> User:
     """
     Get current user's profile.
-    
+
     Returns the full profile of the authenticated user.
     """
     return current_user
@@ -54,7 +54,7 @@ async def update_current_user_profile(
 ) -> User:
     """
     Update current user's profile.
-    
+
     - **full_name**: Optional new full name
     - **password**: Optional new password (minimum 8 characters)
     """
@@ -79,7 +79,7 @@ async def delete_current_user(
 ) -> None:
     """
     Delete current user's account.
-    
+
     This action is permanent and cannot be undone.
     """
     user_service = UserService(db)
@@ -105,18 +105,18 @@ async def get_user_by_id(
 ) -> User:
     """
     Get a user by ID.
-    
+
     Requires superuser privileges.
     """
     user_service = UserService(db)
     user = await user_service.get_by_id(user_id)
-    
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
         )
-    
+
     return user
 
 
@@ -139,18 +139,18 @@ async def activate_user(
 ) -> User:
     """
     Activate a user account.
-    
+
     Requires superuser privileges.
     """
     user_service = UserService(db)
     user = await user_service.get_by_id(user_id)
-    
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
         )
-    
+
     return await user_service.set_active(user, True)
 
 
@@ -173,22 +173,22 @@ async def deactivate_user(
 ) -> User:
     """
     Deactivate a user account.
-    
+
     Requires superuser privileges.
     """
     user_service = UserService(db)
     user = await user_service.get_by_id(user_id)
-    
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
         )
-    
+
     if user.id == current_user.id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot deactivate your own account",
         )
-    
+
     return await user_service.set_active(user, False)

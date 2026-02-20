@@ -5,6 +5,7 @@ from src.models.user import User
 
 router = APIRouter()
 
+
 @router.post("/")
 async def geocode(
     payload: dict,
@@ -16,15 +17,18 @@ async def geocode(
 class GeocodeRequest(BaseModel):
     address: str = Field(..., min_length=3)
     language: str | None = Field(default="en")
-    region: str | None = Field(default=None) 
+    region: str | None = Field(default=None)
+
 
 class GeoPoint(BaseModel):
     lat: float
     lng: float
 
+
 class PlaceEnrichment(BaseModel):
     display_name: str | None = None
     formatted_address: str | None = None
+
 
 class LISLocationResponse(BaseModel):
     input_address: str

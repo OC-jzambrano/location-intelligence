@@ -38,14 +38,14 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     Application lifespan manager.
-    
+
     Handles startup and shutdown events:
     - Startup: Initialize database, connect to Redis
     - Shutdown: Close database connections, disconnect from Redis
     """
     # Startup
     logger.info(f"Starting {settings.app_name} in {settings.app_env} mode")
-    
+
     # Initialize database
     try:
         await init_db()
@@ -53,42 +53,42 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")
         raise
-    
+
     # Initialize Redis (optional - falls back to in-memory if unavailable)
     try:
         import redis.asyncio as redis
-        
+
         redis_client = redis.from_url(
             settings.redis_url,
             encoding="utf-8",
             decode_responses=True,
         )
-        
+
         # Test connection
         await redis_client.ping()
-        
+
         # Set up Redis-based caching and rate limiting
         set_redis_cache(redis_client)
         set_redis_rate_limiter(redis_client)
-        
+
         logger.info("Redis connected successfully")
-        
+
         # Store client for cleanup
         app.state.redis = redis_client
     except Exception as e:
         logger.warning(f"Redis not available, using in-memory fallback: {e}")
         app.state.redis = None
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down application")
-    
+
     # Close Redis connection
     if hasattr(app.state, "redis") and app.state.redis:
         await app.state.redis.close()
         logger.info("Redis connection closed")
-    
+
     # Close database connections
     await close_db()
     logger.info("Database connections closed")
@@ -97,7 +97,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 def create_application() -> FastAPI:
     """
     Create and configure the FastAPI application.
-    
+
     Returns:
         Configured FastAPI application instance.
     """
@@ -133,7 +133,7 @@ API endpoints are rate limited. Check response headers for current limits:
         openapi_url="/openapi.json" if settings.debug else None,
         lifespan=lifespan,
     )
-    
+
     # Configure CORS
     app.add_middleware(
         CORSMiddleware,
@@ -142,7 +142,7 @@ API endpoints are rate limited. Check response headers for current limits:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    
+
     # Add custom exception handlers
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(
@@ -159,7 +159,7 @@ API endpoints are rate limited. Check response headers for current limits:
                 "details": exc.errors(),
             },
         )
-    
+
     @app.exception_handler(Exception)
     async def general_exception_handler(
         request: Request,
@@ -167,7 +167,7 @@ API endpoints are rate limited. Check response headers for current limits:
     ) -> JSONResponse:
         """Handle unexpected errors."""
         logger.exception(f"Unhandled exception: {exc}")
-        
+
         # Don't expose internal errors in production
         if settings.is_production:
             return JSONResponse(
@@ -178,7 +178,7 @@ API endpoints are rate limited. Check response headers for current limits:
                     "message": "An unexpected error occurred",
                 },
             )
-        
+
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
@@ -187,10 +187,10 @@ API endpoints are rate limited. Check response headers for current limits:
                 "message": str(exc),
             },
         )
-    
+
     # Include API routers
     app.include_router(api_router, prefix=settings.api_v1_prefix)
-    
+
     # Root endpoint
     @app.get("/", include_in_schema=False)
     async def root() -> dict[str, str]:
@@ -201,7 +201,7 @@ API endpoints are rate limited. Check response headers for current limits:
             "docs": f"{settings.api_v1_prefix}/docs" if settings.debug else "disabled",
             "health": f"{settings.api_v1_prefix}/health",
         }
-    
+
     return app
 
 
@@ -211,7 +211,7 @@ app = create_application()
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     uvicorn.run(
         "src.main:app",
         host=settings.host,

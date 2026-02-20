@@ -17,10 +17,10 @@ async def test_get_user_profile(
         "/api/v1/users/me",
         headers=auth_headers,
     )
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["email"] == test_user.email
     assert data["full_name"] == test_user.full_name
     assert data["is_active"] is True
@@ -30,7 +30,7 @@ async def test_get_user_profile(
 async def test_get_user_profile_unauthenticated(client: AsyncClient) -> None:
     """Test getting profile without authentication fails."""
     response = await client.get("/api/v1/users/me")
-    
+
     assert response.status_code == 403
 
 
@@ -46,10 +46,10 @@ async def test_update_user_profile(
         headers=auth_headers,
         json={"full_name": "Updated Name"},
     )
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["full_name"] == "Updated Name"
     assert data["email"] == test_user.email  # Email unchanged
 
@@ -62,15 +62,15 @@ async def test_update_user_password(
 ) -> None:
     """Test updating user password."""
     new_password = "newpassword456"
-    
+
     response = await client.patch(
         "/api/v1/users/me",
         headers=auth_headers,
         json={"password": new_password},
     )
-    
+
     assert response.status_code == 200
-    
+
     # Verify new password works
     login_response = await client.post(
         "/api/v1/auth/login",
@@ -79,7 +79,7 @@ async def test_update_user_password(
             "password": new_password,
         },
     )
-    
+
     assert login_response.status_code == 200
 
 
@@ -93,15 +93,15 @@ async def test_delete_user_account(
         "/api/v1/users/me",
         headers=auth_headers,
     )
-    
+
     assert response.status_code == 204
-    
+
     # Verify user is deleted (token should no longer work)
     profile_response = await client.get(
         "/api/v1/users/me",
         headers=auth_headers,
     )
-    
+
     assert profile_response.status_code == 401
 
 
@@ -116,10 +116,10 @@ async def test_admin_get_user_by_id(
         f"/api/v1/users/{test_user.id}",
         headers=admin_auth_headers,
     )
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["id"] == test_user.id
     assert data["email"] == test_user.email
 
@@ -136,7 +136,7 @@ async def test_non_admin_cannot_get_user_by_id(
         f"/api/v1/users/{test_superuser.id}",
         headers=auth_headers,
     )
-    
+
     assert response.status_code == 403
 
 
@@ -150,7 +150,7 @@ async def test_admin_get_nonexistent_user(
         "/api/v1/users/99999",
         headers=admin_auth_headers,
     )
-    
+
     assert response.status_code == 404
 
 
@@ -165,10 +165,10 @@ async def test_admin_deactivate_user(
         f"/api/v1/users/{test_user.id}/deactivate",
         headers=admin_auth_headers,
     )
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["is_active"] is False
 
 
@@ -184,16 +184,16 @@ async def test_admin_activate_user(
         f"/api/v1/users/{test_user.id}/deactivate",
         headers=admin_auth_headers,
     )
-    
+
     # Then activate
     response = await client.patch(
         f"/api/v1/users/{test_user.id}/activate",
         headers=admin_auth_headers,
     )
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["is_active"] is True
 
 
@@ -208,6 +208,6 @@ async def test_admin_cannot_deactivate_self(
         f"/api/v1/users/{test_superuser.id}/deactivate",
         headers=admin_auth_headers,
     )
-    
+
     assert response.status_code == 400
     assert "own account" in response.json()["detail"].lower()

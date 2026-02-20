@@ -3,10 +3,13 @@ from src.adapters.google_places_new import GooglePlacesNewAdapter
 from src.schemas.geocode import LISLocationResponse, GeoPoint, PlaceEnrichment
 from src.core.config import settings
 
+
 class LISService:
     class NoResultsError(Exception): ...
+
     class ProviderTimeoutError(Exception): ...
-    class ProviderError(Exception): 
+
+    class ProviderError(Exception):
         def __init__(self, code: str):
             self.code = code
 
@@ -17,7 +20,9 @@ class LISService:
     def normalize(self, address: str) -> str:
         return " ".join(address.strip().split())
 
-    async def resolve_location(self, address: str, language: str | None, region: str | None) -> LISLocationResponse:
+    async def resolve_location(
+        self, address: str, language: str | None, region: str | None
+    ) -> LISLocationResponse:
         normalized = self.normalize(address)
 
         # Phase 1: Geocoding (lat/lng + place_id) :contentReference[oaicite:10]{index=10}

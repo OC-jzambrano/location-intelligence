@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 class UserBase(BaseModel):
     """Base schema for user data."""
-    
+
     email: EmailStr = Field(
         ...,
         description="User's email address",
@@ -23,7 +23,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """Schema for user registration."""
-    
+
     password: str = Field(
         ...,
         min_length=8,
@@ -35,7 +35,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     """Schema for updating user profile."""
-    
+
     full_name: str | None = Field(
         default=None,
         max_length=255,
@@ -51,9 +51,9 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     """Schema for user responses (excludes sensitive data)."""
-    
+
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int = Field(
         ...,
         description="User's unique identifier",
@@ -78,6 +78,6 @@ class UserResponse(UserBase):
 
 class UserInDB(UserResponse):
     """Schema for user data including hashed password (internal use only)."""
-    
+
     hashed_password: str
     is_superuser: bool

@@ -15,7 +15,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """
     Application settings loaded from environment variables.
-    
+
     Attributes are grouped by concern for easier navigation.
     All secrets and sensitive values MUST be provided via environment.
     """
@@ -79,7 +79,6 @@ class Settings(BaseSettings):
     # -------------------------------------------------------------------------
     google_maps_api_key: str
 
-
     # -------------------------------------------------------------------------
     # Rate Limiting Settings
     # -------------------------------------------------------------------------
@@ -113,7 +112,7 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """
     Get cached application settings.
-    
+
     Uses lru_cache to ensure settings are only loaded once.
     """
     return Settings()

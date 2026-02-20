@@ -4,39 +4,38 @@ Production-grade Location Intelligence API built on FastAPI with JWT auth, versi
 
 ## What this project does
 
-This API exposes two core endpoints under /api/v1:
+This API exposes two core endpoints under `/api/v1`:
 
-POST /api/v1/normalize
-Takes a raw address string and returns a normalized version.
-
-POST /api/v1/geocode (protected)
-Takes an address (plus optional language and region), normalizes it, geocodes it, and (optionally) enriches it with place details.
+- **POST `/api/v1/normalize`** — Takes a raw address string and returns a normalized version.
+- **POST `/api/v1/geocode` (protected)** — Takes an address (plus optional language and region), normalizes it, geocodes it, and (optionally) enriches it with place details.
 
 Authentication uses JWT (access + refresh tokens). Protected endpoints require:
 
+```
 Authorization: Bearer <access_token>
+```
 
 ## Postman Collection
 
 A Postman collection is included to make testing repeatable across machines and environments.
 
-Import collection from:
-docs/postman/FastAPI-API-v1.postman_collection.json
+**Import collection from:**
+```
+docs/postman/location_intelligence.postman_collection.json
+```
 
-Use these variables inside Postman:
+**Use these variables inside Postman:**
 
-{{base_url}} → default: http://localhost:8000/api/v1
-{{jwt_token}} → auto-filled by the login request
+- `{{base_url}}` → default: `http://localhost:8000/api/v1`
+- `{{jwt_token}}` → auto-filled by the login request
 
-**Provider error handling**
+### Provider error handling
 
 The API is designed to map provider failures into predictable API responses. Typical behaviors you should implement and test:
 
-“No results” from provider → return 422 with a clear code like NO_RESULTS
-
-Provider timeout → return 422 with a code like TIMEOUT
-
-Other provider errors → return 422 with a code like PROVIDER_ERROR:<details>
+- **"No results" from provider** → return 422 with a clear code like `NO_RESULTS`
+- **Provider timeout** → return 422 with a code like `TIMEOUT`
+- **Other provider errors** → return 422 with a code like `PROVIDER_ERROR`
 
 This keeps the API contract stable while still exposing what happened.
 
@@ -52,7 +51,6 @@ This keeps the API contract stable while still exposing what happened.
 - Python 3.11+
 - Docker and docker-compose
 - Basic understanding of FastAPI and async Python
-
 
 ## Quick Start
 
@@ -159,35 +157,42 @@ Authorization: Bearer <access_token>
 curl -X POST http://localhost:8000/api/v1/auth/refresh \
   -H "Content-Type: application/json" \
   -d '{"refresh_token": "<refresh_token>"}'
-How to test endpoints
-POST /api/v1/normalize
+## Testing Endpoints
 
-Request:
+### POST `/api/v1/normalize`
 
+**Request:**
+
+```bash
 curl -X POST http://localhost:8000/api/v1/normalize \
   -H "Content-Type: application/json" \
-  -d '{"address":" 1600 Amphitheatre Parkway, Mountain View, CA "}'
+  -d '{"address": " 1600 Amphitheatre Parkway, Mountain View, CA "}'
+```
 
-Expected response shape:
+**Expected response:**
 
+```json
 {
   "input_address": " 1600 Amphitheatre Parkway, Mountain View, CA ",
   "normalized_address": "1600 Amphitheatre Parkway, Mountain View, CA"
 }
-POST /api/v1/geocode (protected)
+```
 
-Request:
+### POST `/api/v1/geocode` (protected)
 
+**Request:**
+
+```bash
 curl -X POST http://localhost:8000/api/v1/geocode \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <access_token>" \
-  -d '{"address":"1600 Amphitheatre Parkway, Mountain View, CA","language":"en","region":"us"}'
+  -d '{"address": "1600 Amphitheatre Parkway, Mountain View, CA", "language": "en", "region": "us"}'
+```
 
-Notes about parameters:
+**Parameters:**
 
-language is optional (defaults typically to "en" if you set it that way in your schema/service)
-
-region is optional and should be a country code used as a bias for results (commonly ISO 3166-1 alpha-2 such as us, co, mx, es, de, fr, gb)
+- `language` (optional) — Language code (defaults to `en`)
+- `region` (optional) — Country code for bias (ISO 3166-1 alpha-2: `us`, `co`, `mx`, `es`, `de`, `fr`, `gb`, etc.)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

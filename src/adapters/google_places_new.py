@@ -1,10 +1,12 @@
 import httpx
 from dataclasses import dataclass
 
+
 @dataclass
 class PlaceDetails:
     display_name: str | None
     formatted_address: str | None
+
 
 class GooglePlacesNewAdapter:
     def __init__(self, api_key: str, base_url: str = "https://places.googleapis.com/v1"):

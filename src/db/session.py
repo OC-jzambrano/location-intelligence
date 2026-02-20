@@ -37,12 +37,12 @@ async_session_maker = async_sessionmaker(
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Dependency for getting database sessions.
-    
+
     Usage:
         @router.get("/items")
         async def get_items(db: AsyncSession = Depends(get_db)):
             ...
-    
+
     Yields:
         AsyncSession: Database session that auto-commits on success
                      and rolls back on exception.
@@ -60,7 +60,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 async def get_db_context() -> AsyncGenerator[AsyncSession, None]:
     """
     Context manager for database sessions outside of request lifecycle.
-    
+
     Usage:
         async with get_db_context() as db:
             result = await db.execute(query)
@@ -77,12 +77,12 @@ async def get_db_context() -> AsyncGenerator[AsyncSession, None]:
 async def init_db() -> None:
     """
     Initialize database tables.
-    
+
     Creates all tables defined in the models.
     Call this during application startup.
     """
     from src.db.base import Base
-    
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -90,7 +90,7 @@ async def init_db() -> None:
 async def close_db() -> None:
     """
     Close database connections.
-    
+
     Call this during application shutdown.
     """
     await engine.dispose()

@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 class LoginRequest(BaseModel):
     """Schema for login requests."""
-    
+
     email: EmailStr = Field(
         ...,
         description="User's email address",
@@ -21,7 +21,7 @@ class LoginRequest(BaseModel):
 
 class TokenResponse(BaseModel):
     """Schema for token responses."""
-    
+
     access_token: str = Field(
         ...,
         description="JWT access token for API authentication",
@@ -42,7 +42,7 @@ class TokenResponse(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     """Schema for token refresh requests."""
-    
+
     refresh_token: str = Field(
         ...,
         description="Valid refresh token",
